@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1012">
+  <meta name="description" content="DeltaX — Round Three. Project Helios. Two possibilities. One proof.">
+  <title>Round 03 · Project Helios | DeltaX</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/common.js" defer></script>
+  <script src="/static/public.js" defer></script>
+</head>
+<body class="public-body">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="frame-corners" aria-hidden="true"></div>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="DeltaX Round Three, home"><span class="brand-symbol">Δ<span>x</span></span><span class="brand-divider"></span><span class="brand-caption">THE MATHEMATICS<br>OF A DECISION</span></a>
+      <div class="header-center"><span class="header-line"></span> PROJECT HELIOS <span class="header-line"></span></div>
+      <div class="top-right"><span class="status-dot"></span><span id="headerStatus">AWAITING THE CHOICE</span><span class="pill-code">R / 03</span></div>
+    </header>
+    <nav class="public-nav" aria-label="Sections">
+      <button type="button" class="nav-tab active" id="challengeTab">01 / The challenge</button>
+      <button type="button" class="nav-tab" id="resourcesTab">02 / Resources <span id="resourceCount" class="resource-count">00</span></button>
+    </nav>
+    <main id="mainPanel" aria-live="polite">
+      <div class="initial-loading"><span class="orbit-loading"></span> Calibrating the final round…</div>
+    </main>
+    <footer class="site-footer"><span>DELTAX <span class="sep">/</span> THE GRAND FINALE</span><span class="footer-middle">OBSERVE <span>→</span> PLAY <span>→</span> <strong>PROVE</strong></span><span>SYNERGY · IIITB</span></footer>
+  </div>
+  <dialog class="brief-dialog" id="briefDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-bar"><span class="eyebrow" id="dialogEyebrow">PROJECT HELIOS</span><button type="button" class="dialog-close" id="closeDialog" aria-label="Close">CLOSE <span aria-hidden="true">×</span></button></div>
+    <div class="dialog-content"><h2 id="dialogTitle"></h2><p id="dialogSubtitle"></p><div class="dialog-shared" id="dialogShared"></div><div id="dialogBody" class="brief-typography"></div></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1012">
+  <title>Control Room · DeltaX R3</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/common.js" defer></script>
+  <script src="/static/admin.js" defer></script>
+</head>
+<body class="admin-body">
+  <div class="grain" aria-hidden="true"></div>
+  <div id="loginView" class="admin-login-view hidden">
+    <div class="login-brand"><span class="brand-symbol">Δ<span>x</span></span><span class="login-number">03 — CONTROL ROOM</span></div>
+    <div class="login-emblem" aria-hidden="true"><svg viewBox="0 0 380 380" fill="none"><circle cx="190" cy="190" r="128" stroke="#a9b6b2" opacity=".2"/><ellipse cx="190" cy="190" rx="158" ry="68" transform="rotate(-33 190 190)" stroke="#d1a37c" opacity=".55"/><ellipse cx="190" cy="190" rx="158" ry="68" transform="rotate(33 190 190)" stroke="#92b8bc" opacity=".55"/><circle cx="190" cy="190" r="12" fill="#d1a37c"/><circle cx="311" cy="109" r="4" fill="#a2c5c1"/></svg></div>
+    <form id="loginForm" class="login-card">
+      <div class="eyebrow"><span class="status-dot"></span> OPERATOR ACCESS ONLY</div>
+      <h1>Hold the<br><em>final variable.</em></h1>
+      <p class="muted">No participant accounts. One operator controls the room.</p>
+      <label for="username">USERNAME</label><input id="username" name="username" autocomplete="username" required placeholder="admin">
+      <label for="password">PASSWORD</label><input id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••••••">
+      <div id="loginError" class="form-error" role="alert"></div>
+      <button type="submit" class="primary-button">ENTER CONTROL ROOM <span aria-hidden="true">↗</span></button>
+      <p class="login-foot">DELTA X / ROUND 03 <span>·</span> AUTHORIZED STAFF</p>
+    </form>
+  </div>
+  <div id="adminApp" class="admin-app hidden">
+    <aside class="admin-sidebar">
+      <a class="sidebar-brand" href="/"><span class="brand-symbol">Δ<span>x</span></span><span class="brand-divider"></span><span>ROUND 03<br><small>PROJECT HELIOS</small></span></a>
+      <div class="sidebar-caption">OPERATOR / CONTROL</div>
+      <nav class="side-nav" aria-label="Admin pages">
+        <button data-section="control" class="side-link active"><span>◈</span> Control room <small>01</small></button>
+        <button data-section="questions" class="side-link"><span>◫</span> Questions <small>02</small></button>
+        <button data-section="resources" class="side-link"><span>↗</span> Resources <small>03</small></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="sidebar-rule"></div><span>PUBLIC EXPERIENCE</span><a href="/" target="_blank" rel="noopener" class="sidebar-preview">Open audience view ↗</a><button id="logoutBtn" class="logout-btn">Sign out</button></div>
+    </aside>
+    <div class="admin-main">
+      <header class="admin-top"><div><div class="eyebrow">DELTAX / ADMINISTRATION</div><h1 id="adminSectionTitle">The control room.</h1></div><div class="operator-indicator"><span class="status-dot"></span><span id="adminStatusLabel">CONNECTING</span></div></header>
+      <div id="adminNotice" class="admin-notice hidden" role="status"></div>
+      <section id="section-control" class="admin-section active">
+        <div class="admin-overline"><span>01 / LIVE OPERATION</span><span id="lastSync">STATE: —</span></div>
+        <div id="audienceGate" class="audience-gate is-sealed" role="group" aria-label="Audience website visibility">
+          <div class="gate-identity"><span class="gate-icon" aria-hidden="true">◉</span><div><span class="eyebrow">PUBLICATION GATE / SERVER-SIDE</span><h2 id="gateTitle">AUDIENCE VIEW IS SEALED</h2><p id="gateDescription">The public site is pitch black. Question text, diagrams and resources are blocked until you reveal them.</p></div></div>
+          <button type="button" id="gateToggle" class="gate-button" disabled>CHECKING VISIBILITY…</button>
+        </div>
+        <div class="dashboard-hero"><div class="dashboard-hero-text"><span class="eyebrow">THE STATE OF THE ROOM</span><div id="phaseDisplay" class="phase-display">Awaiting the vote.</div><p id="phaseExplainer">Both mathematical paths are currently on the public screen.</p></div><div class="dashboard-clock"><span>AUTHORITATIVE CLOCK</span><strong id="adminClock">02:00:00</strong><span id="adminClockState">NOT STARTED</span></div></div>
+        <div class="admin-two-col">
+          <div class="admin-panel"><div class="admin-panel-head"><span class="eyebrow">01.A — DECIDE</span><span class="tiny-label">VISIBLE ONLY AFTER REVEAL</span></div><h2>Commit to one question.</h2><p class="muted">After you reveal the public website, the audience sees two paths until you select one. Selection does not start the clock. You can prepare everything while sealed.</p><div id="adminChoices" class="admin-choices"></div><button id="resetRoundBtn" class="text-action danger-action">↺ Return to two-question screen</button></div>
+          <div class="admin-panel"><div class="admin-panel-head"><span class="eyebrow">01.B — TIME</span><span class="tiny-label">SERVER CONTROLLED</span></div><h2>Control the clock.</h2><p class="muted">The clock survives refreshes and reconnects. Pausing freezes the remaining time for everyone.</p><label class="field-label" for="duration">DURATION / MINUTES</label><div class="duration-row"><input id="duration" type="number" min="1" max="240" value="120"><span>MIN</span></div><div class="timer-actions"><button id="startBtn" class="primary-button">START TIMER <span>→</span></button><button id="pauseBtn" class="secondary-button">PAUSE</button><button id="resumeBtn" class="secondary-button">RESUME</button><button id="finishBtn" class="secondary-button">FINISH NOW</button><button id="resetTimerBtn" class="text-action">↺ Reset timer to start</button></div></div>
+        </div>
+        <div class="admin-panel audit-panel"><div class="admin-panel-head"><span class="eyebrow">ACTIVITY LOG</span><span class="tiny-label">LATEST ACTIONS</span></div><div id="auditList"></div></div>
+      </section>
+      <section id="section-questions" class="admin-section"><div class="admin-overline"><span>02 / CONTENT STUDIO</span><span>EDIT ANYTIME — SAVES TO DATABASE</span></div><div class="editor-help">Edit the competition text without touching code. Use <code>##</code> for section headings, <code>**text**</code> for bold, and <code>::</code> at the start of a line for a displayed formula. Changes appear on the audience site only when the publication gate is open.</div><div class="editor-tabs"><button class="editor-tab active" data-track="A">A / HELIOS I</button><button class="editor-tab" data-track="B">B / HELIOS II</button><button class="editor-tab" data-track="shared">SHARED SCENARIO</button></div><form id="questionForm" class="admin-panel editor-form"><div id="regularFields"><div class="editor-field-grid"><label>TITLE<input id="qTitle" required maxlength="140"></label><label>SUBTITLE<input id="qSubtitle" required maxlength="180"></label></div><label>ONE-LINE DESCRIPTION<input id="qBlurb" maxlength="300"></label></div><label>QUESTION TEXT<textarea id="qContent" spellcheck="false" rows="20" required></textarea></label><div class="editor-actions"><button type="button" id="previewQuestionBtn" class="secondary-button">PREVIEW FORMATTING ↗</button><button type="submit" class="primary-button">SAVE CHANGES <span>→</span></button></div></form></section>
+      <section id="section-resources" class="admin-section"><div class="admin-overline"><span>03 / OPTIONAL LIBRARY</span><span>HIDDEN BY DEFAULT</span></div><div class="admin-panel resources-intro"><div><span class="eyebrow">RESOURCE DESK</span><h2>Keep references close.</h2><p class="muted">Add links or upload PDF/images. Resources appear to the audience only when both the publication gate is open and the individual resource is marked <strong>PUBLIC</strong>. An empty tab displays a quiet placeholder.</p></div><div class="resource-big-icon">↗</div></div><div class="admin-two-col"><form id="linkForm" class="admin-panel admin-form"><span class="eyebrow">ADD A LINK</span><label>TITLE<input name="title" required maxlength="140" placeholder="Reference table"></label><label>URL<input name="url" type="url" required placeholder="https://..."></label><label>DESCRIPTION <span class="optional">OPTIONAL</span><textarea name="description" rows="3" maxlength="400"></textarea></label><label class="checkbox-line"><input type="checkbox" name="visible"> Show to audience immediately</label><button type="submit" class="primary-button">ADD LINK <span>→</span></button></form><form id="uploadForm" class="admin-panel admin-form"><span class="eyebrow">UPLOAD A FILE</span><label>TITLE<input name="title" required maxlength="140" placeholder="Formula sheet"></label><label>FILE<input name="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt" required></label><label>DESCRIPTION <span class="optional">OPTIONAL</span><textarea name="description" rows="3" maxlength="400"></textarea></label><label class="checkbox-line"><input type="checkbox" name="visible"> Show to audience immediately</label><button type="submit" class="primary-button">UPLOAD FILE <span>→</span></button><p class="muted tiny">PDF, PNG, JPG, WebP, TXT · maximum 12 MB</p></form></div><div class="admin-panel"><div class="admin-panel-head"><span class="eyebrow">RESOURCE INVENTORY</span><span id="resourceTotal" class="tiny-label">00 ITEMS</span></div><div id="adminResourceList"></div></div></section>
+    </div>
+  </div>
+  <dialog id="previewDialog" class="brief-dialog"><div class="dialog-bar"><span class="eyebrow">CONTENT PREVIEW</span><button type="button" class="dialog-close" id="closePreview">CLOSE ×</button></div><div class="dialog-content"><h2>Question preview</h2><div id="previewBody" class="brief-typography"></div></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
