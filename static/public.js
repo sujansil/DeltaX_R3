@@ -5,7 +5,7 @@
   const tabChallenge=document.getElementById('challengeTab');
   const tabResources=document.getElementById('resourcesTab');
   const dialog=document.getElementById('briefDialog');
-  let payload=null, section='challenge', signature='', inFlight=false, interval;
+  let payload=null, section='challenge', signature='', inFlight=false, interval, briefTrack=null;
   const stages='<div class="journey"><span><small>01</small> OBSERVE</span><i></i><span><small>02</small> PLAY</span><i></i><span class="journey-now"><small>03</small> PROVE <b class="journey-star">✳</b></span></div>';
   const diagramA=`<svg viewBox="0 0 500 254" class="math-diagram" role="img" aria-label="Semi-elliptical launch boundary enclosing a rectangular satellite core"><defs><linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b98b69" stop-opacity=".23"/><stop offset="1" stop-color="#b98b69" stop-opacity=".01"/></linearGradient></defs><path d="M25 215H475" stroke="#8c9a96" stroke-width=".8" opacity=".35"/><path d="M250 18V236" stroke="#8c9a96" stroke-width=".8" opacity=".27" stroke-dasharray="3 7"/><path class="draw-line" d="M58 215 A192 178 0 0 1 442 215" stroke="#c6a184" stroke-width="1.6" fill="none"/><path d="M114 215 L114 89 L386 89 L386 215 Z" stroke="#d3d4c7" opacity=".74" fill="url(#gA)" stroke-width="1.1"/><path d="M114 89H386" stroke="#d3d4c7" stroke-dasharray="4 7" opacity=".52"/><path d="M114 89L250 215L386 89" stroke="#c5aa87" opacity=".26" fill="none"/><circle cx="114" cy="89" r="3" fill="#c6a184"/><circle cx="386" cy="89" r="3" fill="#c6a184"/><text x="252" y="228" text-anchor="middle">2x₀</text><text x="100" y="155">y₀</text><text x="318" y="40">x²/36 + y²/25 ≤ 1</text><path d="M100 89h-11m11 126h-11M94.5 89v126" stroke="#c6a184" opacity=".4"/></svg>`;
   // Qualitative drawing of the actual coupling law: θ₂ = 2θ₁ relative to
@@ -42,13 +42,15 @@
   }
   function openBrief(track){
     if(!payload)return;
+    briefTrack=track;
     const q=payload.questions[track];
     document.getElementById('dialogEyebrow').textContent=track==='shared'?'THE SHARED CONDITIONS':`PATH ${track} / FULL BRIEF`;
     document.getElementById('dialogTitle').textContent=track==='shared'?'The physical scenario.':q.title;
     document.getElementById('dialogSubtitle').textContent=track==='shared'?'Common to both challenges.':q.subtitle;
     document.getElementById('dialogShared').innerHTML=track==='shared'?'':renderText(payload.state.shared);
     document.getElementById('dialogBody').innerHTML=renderText(track==='shared'?payload.state.shared:q.content);
-    dialog.showModal();
+    window.renderQuestionMath(dialog);
+    if(!dialog.open)dialog.showModal();
   }
   function tick(){
     const el=document.getElementById('publicClock'),s=payload?.state;
@@ -82,6 +84,10 @@
       signature=key;
       if(changing && document.startViewTransition) document.startViewTransition(()=>render());
       else render();
+      if(dialog.open){
+        if(briefTrack==='shared'||payload.questions[briefTrack])openBrief(briefTrack);
+        else dialog.close();
+      }
     }
     tick();
   }catch(e){document.getElementById('headerStatus').textContent='RECONNECTING…';if(!payload)main.innerHTML='<div class="initial-loading">Connection interrupted. Trying again…</div>';}finally{inFlight=false;}}
@@ -91,6 +97,7 @@
     if(section==='resources')renderResources();
     else if(payload?.state.phase==='preview')renderPreview();
     else if(payload)renderSelected();
+    window.renderQuestionMath(main);
   }
   tabChallenge.addEventListener('click',()=>{section='challenge';signature='';render();});
   tabResources.addEventListener('click',()=>{section='resources';signature='';render();});

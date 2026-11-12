@@ -1,0 +1,20 @@
+/* Only rendered equations change. Keep the surrounding interface typography. */
+.dx-math { min-width: 0; }
+.dx-math .formula > span:last-child {
+  min-width: 0;
+}
+.dx-math .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: .2em;
+}
+.dx-math .katex:not(.katex-display .katex) {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: middle;
+  padding-block: .15em;
+}
+.dx-math .katex-error { overflow-wrap: anywhere; }

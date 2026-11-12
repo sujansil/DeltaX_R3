@@ -69,7 +69,7 @@ The public website never needs a team account. Admin login always remains availa
 
 - Admin-only CRUD for questions, scenario, links/files; no participant submissions.
 - Files are restricted to PDF, PNG, JPEG, WebP, TXT, at most **12 MB** each. HTML, SVG, JS, executables are not accepted.
-- Simple editor formatting: `## Heading`, `### Subheading`, `**bold**`, `- list item`, `:: displayed formula`. It uses Unicode symbols rather than TeX; paste mathematical expressions as readable Unicode text.
+- Simple editor formatting: `## Heading`, `### Subheading`, `**bold**`, `- list item`, `:: displayed formula`. Unicode formulas still work. LaTeX uses `\(...\)` or `$...$` inline, and `\[...\]` or `$$...$$` for display math (type one backslash per delimiter). KaTeX 0.19.1, auto-render, CSS and fonts are served locally from `static/vendor/`, using R2's renderer with `trust: false`. Audience views and the admin formatting preview render math after inserting content, including polled question updates.
 - Public preview has short summaries and dedicated **Explore Question** buttons to open each complete paper without switching phases.
 - If the audience website has already been revealed, network interruptions may leave its last-seen content visible and try to reconnect. Once a successful poll observes the SEALED state, the old content is cleared. To guarantee no initial leak, do not reveal until the agreed time.
 
@@ -81,6 +81,37 @@ pytest -q
 ```
 
 These tests use temporary databases; live data is not touched. Security tests verify sealed-by-default, direct-file/alternate-URL blocking, protection of formerly public uploaded resources, admin-only toggle, state persistence and the upgrade from the original schema.
+
+### Local LaTeX browser check
+
+From the repository root, with Node.js and the Python environment installed:
+
+```bash
+.venv/bin/python -m pip install -r requirements.txt pytest httpx
+npm install --prefix /tmp/deltax-r3-browser playwright@1.65.0
+node /tmp/deltax-r3-browser/node_modules/playwright/cli.js install chromium
+NODE_PATH=/tmp/deltax-r3-browser/node_modules node tests/check_math.cjs
+.venv/bin/python -m pytest -q
+```
+
+The browser check starts a local Uvicorn server on an available port and creates its own temporary database and admin. It checks `\(x^2 + y^2 = r^2\)` and `\[\frac{80\sqrt{3}}{57}\]`, plus `$...$` and `$$...$$`, in both preview cards and full-question dialogs, shared conditions, both selected tracks, and the admin formatting preview. It exercises open-dialog edits, polled updates, reloads, timer start/pause/resume/finish/reset, plain text and bold formatting, SVG diagrams, PNG upload/download/decoding, mobile display and sealing. External browser requests are blocked; screenshots and the temporary data location are printed when it passes. The application's existing `data/` is never used. R3 has no online participant answer submission or scoring; answers still go in the supplied booklet.
+
+For an interactive check without changing event data:
+
+```bash
+R3_DATA_DIR="$(mktemp -d /tmp/deltax-r3-manual.XXXXXX)" ./run-local.sh
+```
+
+Create the temporary admin when prompted. Open `/admin` and `/` at `http://127.0.0.1:8303` in separate browser windows. Under **Questions**, paste the following into each Helios paper and the shared scenario, then preview and save:
+
+```text
+## Plain heading
+Plain text and **bold text**.
+Inline \(x^2 + y^2 = r^2\).
+Display \[\frac{80\sqrt{3}}{57}\]
+```
+
+Reveal the audience website by typing `REVEAL`. Check both **Explore Question** dialogs and **Read shared conditions**. Leave a dialog open, edit and save its question, and confirm it updates within about 2.5 seconds. Select each track, check its paper and expanded shared scenario, and exercise the timer. Upload a PNG as a public resource and open its download from **Resources**. The automated check covers these same flows without manual setup.
 
 ## Diagram fidelity
 

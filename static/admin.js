@@ -155,6 +155,7 @@
   });
   $('previewQuestionBtn').addEventListener('click',()=>{
     $('previewBody').innerHTML=renderText($('qContent').value);
+    window.renderQuestionMath($('previewBody'));
     $('previewDialog').showModal();
   });
   $('closePreview').addEventListener('click',()=>$('previewDialog').close());
